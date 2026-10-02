@@ -31,7 +31,7 @@ export function toRows(overpassJson) {
       name,
       t['name:ar'] && t['name:ar'] !== name ? t['name:ar'] : '',
       CAT_INDEX[t.amenity] ?? 0,
-      (t.cuisine || '').replace(/_/g, ' '),
+      (t.cuisine || '').replace(/_/g, ' ').replace(/;\s*/g, ', '),
       t.opening_hours || '',
       t.phone || t['contact:phone'] || '',
       t.website || t['contact:website'] || '',
