@@ -2,7 +2,10 @@
 import { writeFile } from 'node:fs/promises';
 import { fetchOverpass, toRows } from '../js/osm.js';
 
-const json = await fetchOverpass();
+const json = await fetchOverpass({
+  extraHeaders: { 'User-Agent': 'RetroDubai/1.0 (+https://github.com/ikhanai777/RetroMaps)' },
+  rounds: 3,
+});
 const rows = toRows(json).sort((a, b) => a[0].localeCompare(b[0]));
 if (rows.length < 500) throw new Error(`Only ${rows.length} places returned; refusing to overwrite the snapshot.`);
 const out = { updated: new Date().toISOString(), count: rows.length, source: 'OpenStreetMap contributors (ODbL)', rows };

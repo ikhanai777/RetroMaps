@@ -2,6 +2,7 @@
 
 export const OVERPASS_ENDPOINTS = [
   'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
   'https://overpass.private.coffee/api/interpreter',
 ];
 
@@ -50,20 +51,25 @@ export function rowToFeature(r) {
   };
 }
 
-export async function fetchOverpass(fetchImpl = fetch) {
-  let lastErr;
-  for (const url of OVERPASS_ENDPOINTS) {
-    try {
-      const res = await fetchImpl(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'data=' + encodeURIComponent(OVERPASS_QUERY),
-      });
-      if (!res.ok) throw new Error(`${url} answered ${res.status}`);
-      return await res.json();
-    } catch (e) {
-      lastErr = e;
+// Tries each public Overpass server, with a couple of rounds and backoff because they rate-limit.
+// `extraHeaders` lets the Node script send a User-Agent (browsers set their own).
+export async function fetchOverpass({ fetchImpl = fetch, extraHeaders = {}, rounds = 1, waitMs = 15000 } = {}) {
+  const errors = [];
+  for (let round = 0; round < rounds; round++) {
+    if (round) await new Promise((r) => setTimeout(r, waitMs * round));
+    for (const url of OVERPASS_ENDPOINTS) {
+      try {
+        const res = await fetchImpl(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded', ...extraHeaders },
+          body: 'data=' + encodeURIComponent(OVERPASS_QUERY),
+        });
+        if (!res.ok) throw new Error(`answered ${res.status}`);
+        return await res.json();
+      } catch (e) {
+        errors.push(`${url}: ${e.message}`);
+      }
     }
   }
-  throw lastErr;
+  throw new Error(`All Overpass servers failed:\n${errors.join('\n')}`);
 }
