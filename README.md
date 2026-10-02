@@ -19,7 +19,7 @@ python3 -m http.server 8080
 # open http://localhost:8080
 ```
 
-GPS needs HTTPS or `localhost`.
+GPS needs HTTPS or `localhost`. To host it on your own server (or have an agent do it), follow [DEPLOY_LOCAL.md](DEPLOY_LOCAL.md).
 
 ## Data and services
 
