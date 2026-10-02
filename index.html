@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Retro Dubai</title>
+  <meta name="description" content="Every restaurant in Dubai on a retro 3D map, with live GPS directions.">
+  <meta name="theme-color" content="#1b1035">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@6.11.2/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="night">
+  <div id="map" aria-label="Map of Dubai"></div>
+  <div id="crt" aria-hidden="true"></div>
+
+  <header id="topbar">
+    <div class="brand">RETRO<span>DUBAI</span></div>
+    <div class="search">
+      <input id="search" type="search" placeholder="Search restaurants, cuisines..." autocomplete="off" aria-label="Search restaurants">
+      <ul id="results" role="listbox" hidden></ul>
+    </div>
+    <div id="chips" role="group" aria-label="Filter by type"></div>
+  </header>
+
+  <div id="navbanner" hidden>
+    <div class="arrow" id="nav-arrow">↑</div>
+    <div class="nav-text">
+      <div id="nav-dist">--</div>
+      <div id="nav-instr">Calculating route...</div>
+    </div>
+  </div>
+
+  <div id="fabs">
+    <button id="btn-locate" title="My location" aria-label="My location">◎</button>
+    <button id="btn-pitch" title="Toggle 3D" aria-label="Toggle 3D">2D</button>
+    <button id="btn-theme" title="Day or night" aria-label="Toggle day or night">☾</button>
+    <button id="btn-crt" title="CRT effect" aria-label="Toggle CRT effect" class="on">▤</button>
+  </div>
+
+  <section id="card" hidden aria-live="polite">
+    <button class="close" id="card-close" aria-label="Close">✕</button>
+    <div class="cat" id="card-cat"></div>
+    <h2 id="card-name"></h2>
+    <div class="ar" id="card-ar" dir="rtl"></div>
+    <dl id="card-facts"></dl>
+    <div class="modes" role="radiogroup" aria-label="Travel mode">
+      <button class="mode on" data-mode="drive">CAR</button>
+      <button class="mode" data-mode="walk">WALK</button>
+    </div>
+    <div class="actions">
+      <button id="btn-go" class="primary">▶ GO</button>
+      <a id="btn-gmaps" target="_blank" rel="noopener">GOOGLE MAPS</a>
+      <a id="btn-waze" target="_blank" rel="noopener">WAZE</a>
+    </div>
+    <div class="route-info" id="route-info"></div>
+  </section>
+
+  <section id="navpanel" hidden>
+    <div><span id="nav-eta">--</span> · <span id="nav-left">--</span></div>
+    <div class="actions">
+      <button id="btn-demo">DEMO DRIVE</button>
+      <button id="btn-voice" class="on">VOICE ON</button>
+      <button id="btn-stop" class="danger">END</button>
+    </div>
+  </section>
+
+  <div id="toast" role="status" hidden></div>
+
+  <div id="loading">
+    <div class="loading-box">
+      <div class="brand big">RETRO<span>DUBAI</span></div>
+      <div id="loading-msg">LOADING CITY...</div>
+      <div class="bar"><div id="loading-bar"></div></div>
+      <div class="blink">INSERT COIN</div>
+    </div>
+  </div>
+
+  <footer id="credits">
+    Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors ·
+    Tiles <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> ·
+    Routing <a href="https://routing.openstreetmap.de" target="_blank" rel="noopener">FOSSGIS</a>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

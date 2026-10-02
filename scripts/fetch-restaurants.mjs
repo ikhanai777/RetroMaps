@@ -1,0 +1,10 @@
+// Nightly snapshot of every eatery in Dubai from OpenStreetMap (run by .github/workflows/refresh-data.yml).
+import { writeFile } from 'node:fs/promises';
+import { fetchOverpass, toRows } from '../js/osm.js';
+
+const json = await fetchOverpass();
+const rows = toRows(json).sort((a, b) => a[0].localeCompare(b[0]));
+if (rows.length < 500) throw new Error(`Only ${rows.length} places returned; refusing to overwrite the snapshot.`);
+const out = { updated: new Date().toISOString(), count: rows.length, source: 'OpenStreetMap contributors (ODbL)', rows };
+await writeFile(new URL('../data/restaurants.json', import.meta.url), JSON.stringify(out));
+console.log(`Wrote ${rows.length} places`);
